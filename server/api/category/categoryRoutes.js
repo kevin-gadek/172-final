@@ -13,7 +13,7 @@ router.route('/')
 			res.json(data);
 		}
 	});  
-    console.log('Hey from categories!!');
+    console.log('Inside /api/categories');
   });
   
   //working
@@ -84,7 +84,6 @@ router.use(function(err, req, res, next){
 	if(err.status !== 404){
 		return next();
 	}else{
-		
 		res.send("Page not found");
 	}
 })

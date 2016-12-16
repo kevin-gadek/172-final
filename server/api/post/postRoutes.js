@@ -59,8 +59,8 @@ router.route('/:post_id')
 		var updateData = {title: req.body.title,
 						  text: req.body.text,
 						  author: req.body.author,
-						  categories: req.body.category};
-		var updatePost = new post(updateData);
+						  categories: req.body.category}; //messy with multiple categories
+		var updatePost = new post(updateData); //create new post
 		var upsertData = updatePost.toObject();
 		delete upsertData._id;
 		post.update({_id: id}, upsertData, {upsert:true}, function(err, data){
@@ -73,7 +73,7 @@ router.route('/:post_id')
 		});
 		
 	});
-	
+//works	
 router.route('/:post_id')
 	.delete(function(req, res){
 		var id = req.params.post_id;
@@ -87,7 +87,21 @@ router.route('/:post_id')
 		
 		
 	});
-		
+//error handlers		
+router.get('*', function(req, res, next){
+	var err = new Error();
+	err.status = 404;
+	next(err);
+});  
+  
 
+router.use(function(err, req, res, next){
+	if(err.status !== 404){
+		return next();
+	}else{
+		
+		res.send("Page not found");
+	}
+})
 
 module.exports = router;

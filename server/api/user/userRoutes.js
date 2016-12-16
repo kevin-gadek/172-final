@@ -19,6 +19,7 @@ router.route('/')
     console.log('Hey from user!!');
 	//res.send("Got a GET request");
   });
+  
  //working
 router.route('/')
 	.post(function(req, res){
@@ -26,7 +27,11 @@ router.route('/')
 							address: req.body.address};
 			var account = new user(userData);
 			account.save(function(err, records){
-				res.send('User successfully inserted');
+				if(err){
+					res.send(err);
+				}else{
+					res.send('User successfully inserted');
+				}
 			});
 	});
 	
@@ -49,8 +54,8 @@ router.route('/:user_id')
 			var updateData = {username: req.body.name,
 							  address: req.body.address};
 			var updatedAccount = new user(updateData);
-			var upsertData = updatedAccount.toObject();
-			delete upsertData._id;
+			var upsertData = updatedAccount.toObject(); //object cast error without this line
+			delete upsertData._id; 
 			user.update({_id: id}, upsertData, {upsert: true}, function(err, data){
 				if(err){
 					res.send(err);
@@ -60,8 +65,9 @@ router.route('/:user_id')
 			});
 			
 		});
-  //working
- router.route('/:user_id')
+		
+//working
+router.route('/:user_id')
 		.delete(function(req, res){
 			var id = req.params.user_id;
 			user.remove({_id: id}, function(err){
