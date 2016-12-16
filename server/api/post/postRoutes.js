@@ -1,15 +1,12 @@
 var router = require('express').Router();
 var post = require("./postModel");
-//var categories = require("../category/categoryModel");
-//var user = require("../user/userModel");
-// setup boilerplate route jsut to satisfy a request
-// for building
 
 //working
 router.route('/')
   .get(function(req, res){
 	post.find({})
 	.populate('author')
+	.populate('categories')
 	.exec(function(err, data){
 		if(err){
 			res.send(err);
