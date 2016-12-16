@@ -10,7 +10,7 @@ router.route('/')
 	  
 	 user.find({}, function(err, data){
 		 if(err){
-			 res.send(err);
+			 res.send(err.stack);
 		 }else{
 			 res.json(data);
 		 }
@@ -28,7 +28,7 @@ router.route('/')
 			var account = new user(userData);
 			account.save(function(err, records){
 				if(err){
-					res.send(err);
+					res.send(err.stack);
 				}else{
 					res.send('User successfully inserted');
 				}
@@ -41,7 +41,7 @@ router.route('/:user_id')
 		var id = req.params.user_id;
 		user.findById(id, function(err, data){
 			if(err){
-				res.send(err);
+				res.send(err.stack);
 			}else{
 				res.json(data);
 			}
@@ -58,7 +58,7 @@ router.route('/:user_id')
 			delete upsertData._id; 
 			user.update({_id: id}, upsertData, {upsert: true}, function(err, data){
 				if(err){
-					res.send(err);
+					res.send(err.stack); //will probably send a cast error as res if id not found
 				}else{
 					res.send("User successfully updated");
 				}
@@ -72,7 +72,7 @@ router.route('/:user_id')
 			var id = req.params.user_id;
 			user.remove({_id: id}, function(err){
 				if(err){
-					res.send(err);
+					res.send(err.stack);
 				}else{
 					res.send("User successfully deleted");
 				}
@@ -83,7 +83,9 @@ router.route('/:user_id')
 			
 		});
   
-  //error-handling middleware
+  //if request for anything else not part of routes specified above; for instance localhost:8080/api/users/dajs/321 will return "Page not found"
+  
+  //error-handling middleware functions
 router.get('*', function(req, res, next){
 	var err = new Error();
 	err.status = 404;
@@ -92,12 +94,21 @@ router.get('*', function(req, res, next){
   
 
 router.use(function(err, req, res, next){
+	console.log(err.stack);
+	if(err.status == 404){
+			res.send("Page not found");
+	}
+	if(err.status == 500){
+			res.send({"Error": err.stack});
+	}
+	/*
 	if(err.status !== 404){
 		return next();
 	}else{
 		
 		res.send("Page not found");
 	}
+	*/
 })
   
 module.exports = router;
