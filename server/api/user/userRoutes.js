@@ -22,13 +22,14 @@ router.route('/')
  
 router.route('/')
 	.post(function(req, res){
-			var document = {username: req.body.name,
+			var userData = {username: req.body.name,
 							address: req.body.address};
-			var account = new user(document);
-			document.save(function(err, records){
+			var account = new user(userData);
+			account.save(function(err, records){
 				res.send('User successfully inserted');
 			});
 	});
+	
 //working
 router.route('/:user_id')
 	.get(function(req, res){
@@ -41,7 +42,8 @@ router.route('/:user_id')
 			}
 		});
 	});
-  
+
+	
   
   //error-handling middleware
 router.get('*', function(req, res, next){
