@@ -12,9 +12,21 @@ router.route('/')
     res.send({ok: true});
   });
 
-//error-handling middleware
+  //error-handling middleware
+router.get('*', function(req, res, next){
+	var err = new Error();
+	err.status = 404;
+	next(err);
+});  
+  
+
 router.use(function(err, req, res, next){
-	res.status(500).send('Error');
+	if(err.status !== 404){
+		return next();
+	}else{
+		
+		res.send("Page not found");
+	}
 })
   
 module.exports = router;
