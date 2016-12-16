@@ -17,7 +17,7 @@ var PostSchema = new Schema({
         {type: Schema.Types.ObjectId,
          ref: 'user',
          required:true
-        }
+        },
   categories:
 		[{
 		type: Schema.Types.ObjectId,
