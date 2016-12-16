@@ -12,4 +12,10 @@ router.route('/')
     res.send({ok: true});
   });
 
+//error-handling middleware
+router.use(function(err, req, res, next){
+	res.status(500).send('Error');
+})
+  
 module.exports = router;
+
