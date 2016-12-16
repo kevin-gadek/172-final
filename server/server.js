@@ -11,6 +11,8 @@ mongoose.connect(config.db.url);
  app.use(morgan('dev'));
  app.use(bodyParser.urlencoded({ extended: true }));
  app.use(bodyParser.json());
+ var db = mongoose.connection;
+var dbCollection = db.collections;
 
 
 //In a large application, 
