@@ -19,7 +19,7 @@ router.route('/')
     console.log('Hey from user!!');
 	//res.send("Got a GET request");
   });
- 
+ //working
 router.route('/')
 	.post(function(req, res){
 			var userData = {username: req.body.name,
@@ -42,8 +42,40 @@ router.route('/:user_id')
 			}
 		});
 	});
-
-	
+//working
+router.route('/:user_id')
+		.put(function(req, res){
+			var id = req.params.user_id;
+			var updateData = {username: req.body.name,
+							  address: req.body.address};
+			var updatedAccount = new user(updateData);
+			var upsertData = updatedAccount.toObject();
+			delete upsertData._id;
+			user.update({_id: id}, upsertData, {upsert: true}, function(err, data){
+				if(err){
+					res.send(err);
+				}else{
+					res.send("User successfully updated");
+				}
+			});
+			
+		});
+  //working
+ router.route('/:user_id')
+		.delete(function(req, res){
+			var id = req.params.user_id;
+			user.remove({_id: id}, function(err){
+				if(err){
+					res.send(err);
+				}else{
+					res.send("User successfully deleted");
+				}
+				
+			});
+			
+			
+			
+		});
   
   //error-handling middleware
 router.get('*', function(req, res, next){
