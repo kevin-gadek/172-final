@@ -11,9 +11,11 @@ mongoose.connect(config.db.url);
  app.use(morgan('dev'));
  app.use(bodyParser.urlencoded({ extended: true }));
  app.use(bodyParser.json());
+ 
+ /* don't need this anymore
  var db = mongoose.connection;
 var dbCollection = db.collections;
-
+*/
 
 //In a large application, 
 //things could easily get out of control 
