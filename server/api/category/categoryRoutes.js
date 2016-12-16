@@ -3,7 +3,7 @@ var categories = require("./categoryModel");
 // setup boilerplate route jsut to satisfy a request
 // for building
 
-//working
+// / GET request working
 router.route('/')
   .get(function(req, res){
 	categories.find({}, function(err, data){
@@ -16,7 +16,7 @@ router.route('/')
     console.log('Inside /api/categories');
   });
   
-  //working
+  // / POST request working
   router.route('/')
 	.post(function(req, res){
 		var categoryData = {name: req.body.name};
@@ -27,7 +27,7 @@ router.route('/')
 		
 		
 	});
-//working
+// /:category_id GET request working
 router.route('/:category_id')
 	.get(function(req, res){
 		var id = req.params.category_id;
@@ -57,7 +57,7 @@ router.route('/:category_id')
 			}			
 		});
 	});
-	//works
+	//:category_id DELETE request working
 router.route('/:category_id')
 		.delete(function(req, res){
 			var id = req.params.category_id;

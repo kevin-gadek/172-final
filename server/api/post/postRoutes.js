@@ -2,6 +2,7 @@ var router = require('express').Router();
 var post = require("./postModel");
 
 //working
+//.populate('author', 'categories') doesn't seem to work 
 router.route('/')
   .get(function(req, res){
 	post.find({})
@@ -18,13 +19,13 @@ router.route('/')
     console.log('Hey from post!!');
   });
   
-  //ehh, works enough
+  //ehh, works enough, seems to sometimes overwrite existing posts though
   router.route('/')
 	.post(function(req,res){
 		var postData = {title: req.body.title,
 						text: req.body.text,
 						author: req.body.author,
-						categories: req.body.category}
+						categories: req.body.category} //single category can be POSTed
 		var userPost = new post(postData);
 		userPost.save(function(err, records){
 			if(err){
@@ -70,7 +71,7 @@ router.route('/:post_id')
 		});
 		
 	});
-//works	
+// /:post_id DELETE request
 router.route('/:post_id')
 	.delete(function(req, res){
 		var id = req.params.post_id;
@@ -85,6 +86,7 @@ router.route('/:post_id')
 		
 	});
 //error handlers		
+//if any other page other than ones above, this function gets called
 router.get('*', function(req, res, next){
 	var err = new Error();
 	err.status = 404;
@@ -96,7 +98,6 @@ router.use(function(err, req, res, next){
 	if(err.status !== 404){
 		return next();
 	}else{
-		
 		res.send("Page not found");
 	}
 })
